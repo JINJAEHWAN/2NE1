@@ -20,7 +20,7 @@ public class CampManagementApplication {
     // 데이터 저장소
     private static List<Student> studentStore;
     private static List<Subject> subjectStore;
-    private static List<Score> ScoreStore;
+    private static List<Score> scoreStore;
 
     // 과목 타입
     private static String SUBJECT_TYPE_MANDATORY = "MANDATORY";
@@ -96,7 +96,7 @@ public class CampManagementApplication {
                         SUBJECT_TYPE_CHOICE
                 )
         );
-        ScoreStore = new ArrayList<>();
+        scoreStore = new ArrayList<>();
     }
 
     // index 자동 증가
