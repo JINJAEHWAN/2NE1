@@ -16,8 +16,6 @@ import java.util.Scanner;
  * 프로젝트 구조를 변경하거나 기능을 추가해도 괜찮습니다!
  * 구현에 도움을 주기위한 Base 프로젝트입니다. 자유롭게 이용해주세요!
  */
-
-//git branch dev
 public class CampManagementApplication {
     // 데이터 저장소
     private static List<Student> studentStore;
@@ -51,53 +49,7 @@ public class CampManagementApplication {
     // 초기 데이터 생성
     private static void setInitData() {
         studentStore = new ArrayList<>();
-        subjectStore = List.of(
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "Java",
-                        SUBJECT_TYPE_MANDATORY
-                ),
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "객체지향",
-                        SUBJECT_TYPE_MANDATORY
-                ),
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "Spring",
-                        SUBJECT_TYPE_MANDATORY
-                ),
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "JPA",
-                        SUBJECT_TYPE_MANDATORY
-                ),
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "MySQL",
-                        SUBJECT_TYPE_MANDATORY
-                ),
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "디자인 패턴",
-                        SUBJECT_TYPE_CHOICE
-                ),
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "Spring Security",
-                        SUBJECT_TYPE_CHOICE
-                ),
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "Redis",
-                        SUBJECT_TYPE_CHOICE
-                ),
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "MongoDB",
-                        SUBJECT_TYPE_CHOICE
-                )
-        );
+        subjectStore = List.of(new Subject(sequence(INDEX_TYPE_SUBJECT), "Java", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "객체지향", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "JPA", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "MySQL", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "디자인 패턴", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring Security", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "Redis", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "MongoDB", SUBJECT_TYPE_CHOICE));
         scoreStore = new ArrayList<>();
     }
 
@@ -174,6 +126,7 @@ public class CampManagementApplication {
         // 기능 구현 (필수 과목, 선택 과목)
 
         Student student = new Student(sequence(INDEX_TYPE_STUDENT), studentName); // 수강생 인스턴스 생성 예시 코드
+
         // 기능 구현
         studentStore.add(student);
         System.out.println("수강생 등록 성공!\n");
@@ -189,6 +142,7 @@ public class CampManagementApplication {
         }
         System.out.println("\n수강생 목록 조회 성공!");
     }
+
 
     private static void displayScoreView() {
         boolean flag = true;
@@ -224,9 +178,6 @@ public class CampManagementApplication {
     private static void createScore() {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         System.out.println("시험 점수를 등록합니다...");
-
-
-
         // 기능 구현
         System.out.println("\n점수 등록 성공!");
     }
@@ -235,7 +186,26 @@ public class CampManagementApplication {
     private static void updateRoundScoreBySubject() {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         // 기능 구현 (수정할 과목 및 회차, 점수)
+        if (studentId == null) {
+            System.out.println("수강생을 찾을 수 없습니다.");
+            return;
+        } else {
+            System.out.println("수강생을 찾았습니다.");
+        }
+
         System.out.println("시험 점수를 수정합니다...");
+
+        //수정할 과목 입력
+        System.out.print("수정할 과목명을 입력하세요: ");
+        String subjectName = sc.next();
+
+        //수정할 회차 입력
+        System.out.print("수정할 회차를 입력하세요: ");
+
+        //수정할 점수 입력
+        System.out.print("수정할 점수를 입력하세요: ");
+
+
         // 기능 구현
         System.out.println("\n점수 수정 성공!");
     }
