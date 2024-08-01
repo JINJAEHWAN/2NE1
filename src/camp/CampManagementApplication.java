@@ -161,7 +161,7 @@ public class CampManagementApplication {
     private static void inquireStudent() {
         System.out.println("\n수강생 목록을 조회합니다...");
         // 기능 구현
-        for (Student element : studentStore){
+        for (Student element : studentStore) {
             System.out.println(element.getStudentName());
             System.out.println(element.getStudentId());
         }
@@ -203,13 +203,15 @@ public class CampManagementApplication {
     private static void createScore() {
         String studentId = getStudentId();// 관리할 수강생 고유 번호
         System.out.println("과목 ID를 입력하세요 :");
-        String subjectId = sc.next();
+        String subjectID = sc.next();
+        System.out.println("과목명을 입력하세요 :");
+        String subjectname = sc.next();
         System.out.println("회차를 입력하세요 :");
         int round = sc.nextInt();
         System.out.println("점수를 입력하세요 :");
         int score = sc.nextInt();
 
-        Score scoreID = new Score(sequence(INDEX_TYPE_SCORE), studentId, subjectId, round, score);
+        Score scoreID = new Score(sequence(INDEX_TYPE_SCORE), studentId, round, score, subjectID, subjectname);
         scoreStore.add(scoreID);
 
         System.out.println("시험 점수를 등록합니다...");
@@ -304,7 +306,6 @@ public class CampManagementApplication {
 
 
         System.out.println("회차별 등급을 조회합니다...");
-
 
 
         // 기능 구현
