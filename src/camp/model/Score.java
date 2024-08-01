@@ -11,7 +11,7 @@ public class Score {
     private char grade;
 
     // Score 생성자 - 회차정보(사용자입력), score 점수를 기반으로 Score 인스턴스 생성시 자동으로 grade 값 할당.
-    public Score(String scoreId, String studentId, int round, int score, String subjectId, String subjectName) {
+    public Score(String scoreId, String studentId, int round, int score, String subjectId) {
         this.scoreId = scoreId;
         this.studentId = studentId;
         this.subjectId = subjectId;
