@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+
 /**
  * Notification
  * Java, 객체지향이 아직 익숙하지 않은 분들은 위한 소스코드 틀입니다.
@@ -16,6 +17,10 @@ import java.util.Scanner;
  * 프로젝트 구조를 변경하거나 기능을 추가해도 괜찮습니다!
  * 구현에 도움을 주기위한 Base 프로젝트입니다. 자유롭게 이용해주세요!
  */
+
+
+//git branch dev
+
 public class CampManagementApplication {
     // 데이터 저장소
     private static List<Student> studentStore;
@@ -179,6 +184,9 @@ public class CampManagementApplication {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         System.out.println("시험 점수를 등록합니다...");
         // 기능 구현
+        Score scoreID = new Score("4564", 1, 90,"156545");
+        System.out.println(scoreID.getGrade());
+
         System.out.println("\n점수 등록 성공!");
     }
 
@@ -186,26 +194,68 @@ public class CampManagementApplication {
     private static void updateRoundScoreBySubject() {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         // 기능 구현 (수정할 과목 및 회차, 점수)
-        if (studentId == null) {
+
+        // studentStore에서 해당 studentId를 가진 수강생이 있는지 확인
+        boolean exist = false;
+        for (int i = 0; i < studentStore.size(); i++) {
+            if (studentStore.get(i).getStudentId().equals(studentId)) {
+                exist = true;
+                break;
+            }
+        }
+        if (!exist) {
             System.out.println("수강생을 찾을 수 없습니다.");
             return;
         } else {
             System.out.println("수강생을 찾았습니다.");
         }
 
-        System.out.println("시험 점수를 수정합니다...");
-
-        //수정할 과목 입력
         System.out.print("수정할 과목명을 입력하세요: ");
         String subjectName = sc.next();
-
+        boolean exist2 = false;
+        for (int i = 0; i < subjectStore.size(); i++) {
+            if (subjectStore.get(i).getSubjectName().equals(subjectName)) {
+                exist2 = true;
+                break;
+            }
+        }
+        if (!exist2) {
+            System.out.println("과목을 찾을 수 없습니다.");
+            return;
+        } else {
+            System.out.println("과목을 찾았습니다.");
+        }
+        // 선택된 학생의 모든 과목과 회차, 점수 출력
+        System.out.println("해당 수강생의 점수 목록:");
+        for (int i = 0; i < scoreStore.size(); i++) {
+            Score score = scoreStore.get(i);
+            if (score.getStudentId().equals(studentId)) {
+                System.out.println("과목: " + score.getScoreId() + ", 회차: " + score.getRound() + ", 점수: " + score.getScore() + ", 등급: " + score.getGrade());
+            }
+        }
         //수정할 회차 입력
         System.out.print("수정할 회차를 입력하세요: ");
+        int round = sc.nextInt();
 
         //수정할 점수 입력
         System.out.print("수정할 점수를 입력하세요: ");
+        int newScore = sc.nextInt();
 
-
+        //점수수정
+        boolean update = false;
+        for (int i = 0; i < scoreStore.size(); i++) {
+            Score score = scoreStore.get(i);
+            if (score.getStudentId().equals(studentId) && score.getRound() == round) {
+                score.setScore(newScore);
+                update = true;
+                System.out.println("\n점수 수정 성공!");
+                System.out.println("[수정사항] 회차: " + score.getRound() + ", 점수: " + score.getScore() + ", 등급: " + score.getGrade());
+                break;
+            }
+        }
+        if (!update) {
+            System.out.println("\n해당하는 점수를 찾을 수 없습니다.");
+        }
         // 기능 구현
         System.out.println("\n점수 수정 성공!");
     }
