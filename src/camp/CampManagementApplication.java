@@ -64,8 +64,8 @@ public class CampManagementApplication {
         studentStore.add(new Student(sequence(INDEX_TYPE_STUDENT), "홍길동"));
 
         // 더미 점수 데이터 생성
-        scoreStore.add(new Score(sequence(INDEX_TYPE_SCORE), "ST1", "SU1", 1, 92));
-        scoreStore.add(new Score(sequence(INDEX_TYPE_SCORE), "ST1", "SU2", 1, 88));
+        scoreStore.add(new Score(sequence(INDEX_TYPE_SCORE), "ST1", 1, 98, "SU1"));
+        scoreStore.add(new Score(sequence(INDEX_TYPE_SCORE), "ST1", 1, 70, "SU2"));
     }
 
     // index 자동 증가
@@ -201,7 +201,7 @@ public class CampManagementApplication {
         System.out.println("점수를 입력하세요 :");
         int score = sc.nextInt();
 
-        Score scoreID = new Score(sequence(INDEX_TYPE_SCORE), studentId, round, score, subjectID, subjectname);
+        Score scoreID = new Score(sequence(INDEX_TYPE_SCORE), studentId, round, score, subjectID);
 
         scoreStore.add(scoreID);
 
