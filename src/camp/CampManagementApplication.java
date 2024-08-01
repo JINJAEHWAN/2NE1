@@ -4,6 +4,7 @@ import camp.model.Score;
 import camp.model.Student;
 import camp.model.Subject;
 
+import java.net.SecureCacheResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -27,7 +28,7 @@ public class CampManagementApplication {
     private static List<Subject> subjectStore;
     private static List<Score> scoreStore;
 
-    // 과목 타입
+    // 과목 타입(필수와 선택)
     private static String SUBJECT_TYPE_MANDATORY = "MANDATORY";
     private static String SUBJECT_TYPE_CHOICE = "CHOICE";
 
@@ -54,8 +55,27 @@ public class CampManagementApplication {
     // 초기 데이터 생성
     private static void setInitData() {
         studentStore = new ArrayList<>();
-        subjectStore = List.of(new Subject(sequence(INDEX_TYPE_SUBJECT), "Java", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "객체지향", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "JPA", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "MySQL", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "디자인 패턴", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring Security", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "Redis", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "MongoDB", SUBJECT_TYPE_CHOICE));
+        subjectStore = new ArrayList<>();
         scoreStore = new ArrayList<>();
+
+        // 더미 과목 데이터 생성
+        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "Java", SUBJECT_TYPE_MANDATORY));
+        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "Java", SUBJECT_TYPE_MANDATORY));
+        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "객체지향", SUBJECT_TYPE_MANDATORY));
+        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring", SUBJECT_TYPE_MANDATORY));
+        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "JPA", SUBJECT_TYPE_MANDATORY));
+        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "MySQL", SUBJECT_TYPE_MANDATORY));
+        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "디자인 패턴", SUBJECT_TYPE_CHOICE));
+        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring Security", SUBJECT_TYPE_CHOICE));
+        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "Redis", SUBJECT_TYPE_CHOICE));
+        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "MongoDB", SUBJECT_TYPE_CHOICE));
+
+        // 더미 학생 데이터 생성
+        studentStore.add(new Student(sequence(INDEX_TYPE_STUDENT), "홍길동"));
+
+        // 더미 점수 데이터 생성
+        scoreStore.add(new Score(sequence(INDEX_TYPE_SCORE), "ST1", "SU1", 1, 92));
+        scoreStore.add(new Score(sequence(INDEX_TYPE_SCORE), "ST1", "SU2", 1, 88));
     }
 
     // index 자동 증가
@@ -219,11 +239,12 @@ public class CampManagementApplication {
             System.out.println("수강생을 찾았습니다.");
         }
 
-        System.out.print("수정할 과목명을 입력하세요: ");
-        String subjectName = sc.next();
+        System.out.print("수정할 과목코드을 입력하세요: ");
+        String subjectId = sc.next();
+
         boolean exist2 = false;
         for (int i = 0; i < subjectStore.size(); i++) {
-            if (subjectStore.get(i).getSubjectName().equals(subjectName)) {
+            if (subjectStore.get(i).getSubjectId().equals(subjectId)) {
                 exist2 = true;
                 break;
             }
@@ -235,13 +256,20 @@ public class CampManagementApplication {
             System.out.println("과목을 찾았습니다.");
         }
         // 선택된 학생의 모든 과목과 회차, 점수 출력
-        System.out.println("해당 수강생의 점수 목록:");
+        System.out.println("해당 수강생의 " + subjectId + " 과목 점수 목록:");
+        boolean exist3 = false;
         for (int i = 0; i < scoreStore.size(); i++) {
             Score score = scoreStore.get(i);
-            if (score.getStudentId().equals(studentId)) {
-                System.out.println("과목: " + score.getScoreId() + ", 회차: " + score.getRound() + ", 점수: " + score.getScore() + ", 등급: " + score.getGrade());
+            if (score.getStudentId().equals(studentId)&&score.getSubjectId().equals(subjectId)) {
+                System.out.println(", 회차: " + score.getRound() + ", 점수: " + score.getScore() + ", 등급: " + score.getGrade());
+                exist3 = true;
             }
         }
+
+        if (!exist3){
+            System.out.printf("해당 수강생의 점수가 비어있습니다.");
+        }
+
         //수정할 회차 입력
         System.out.print("수정할 회차를 입력하세요: ");
         int round = sc.nextInt();
