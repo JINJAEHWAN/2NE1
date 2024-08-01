@@ -54,22 +54,12 @@ public class CampManagementApplication {
 
     // 초기 데이터 생성
     private static void setInitData() {
-        studentStore = new ArrayList<>();
-        subjectStore = new ArrayList<>();
+
+        studentStore = List.of(new Student(sequence(INDEX_TYPE_STUDENT), "cho"), new Student(sequence(INDEX_TYPE_STUDENT),"bo"));
+        subjectStore = List.of(new Subject(sequence(INDEX_TYPE_SUBJECT), "Java", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "객체지향", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "JPA", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "MySQL", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "디자인 패턴", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring Security", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "Redis", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "MongoDB", SUBJECT_TYPE_CHOICE));
+
         scoreStore = new ArrayList<>();
-
-        // 더미 과목 데이터 생성
-        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "Java", SUBJECT_TYPE_MANDATORY));
-        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "Java", SUBJECT_TYPE_MANDATORY));
-        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "객체지향", SUBJECT_TYPE_MANDATORY));
-        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring", SUBJECT_TYPE_MANDATORY));
-        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "JPA", SUBJECT_TYPE_MANDATORY));
-        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "MySQL", SUBJECT_TYPE_MANDATORY));
-        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "디자인 패턴", SUBJECT_TYPE_CHOICE));
-        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring Security", SUBJECT_TYPE_CHOICE));
-        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "Redis", SUBJECT_TYPE_CHOICE));
-        subjectStore.add(new Subject(sequence(INDEX_TYPE_SUBJECT), "MongoDB", SUBJECT_TYPE_CHOICE));
-
+       
         // 더미 학생 데이터 생성
         studentStore.add(new Student(sequence(INDEX_TYPE_STUDENT), "홍길동"));
 
@@ -195,7 +185,7 @@ public class CampManagementApplication {
     }
 
     private static String getStudentId() {
-        System.out.print("\n관리할 수강생의 번호를 입력하시오...");
+        System.out.print("\n관리할 수강생의 번호를 입력하시오..");
         return sc.next();
     }
 
@@ -212,6 +202,7 @@ public class CampManagementApplication {
         int score = sc.nextInt();
 
         Score scoreID = new Score(sequence(INDEX_TYPE_SCORE), studentId, round, score, subjectID, subjectname);
+
         scoreStore.add(scoreID);
 
         System.out.println("시험 점수를 등록합니다...");
@@ -301,13 +292,41 @@ public class CampManagementApplication {
 
     // 수강생의 특정 과목 회차별 등급 조회
     private static void inquireRoundGradeBySubject() {
-        String studentId = getStudentId(); // 관리할 수강생 고유 번호
         // 기능 구현 (조회할 특정 과목)
+        // 조회(관리)할 수강생의 고유 번호
+        System.out.println("조회할 학생의 고유 번호를 입력해주세요 : ");
+        String studentId = getStudentId();
+        System.out.print("조회할 과목명을 입력해주세요 : ");
+        String subjectName = sc.next();
+        sc.nextLine();
 
+        //해당 학생Id를 기본키로 데이터 조회 - 그 학생Id의 특정 과목에 대한 모든 데이터를 가져와야함.
+        //가져온 Score인스턴스들을 담을 저장소
+        List<Score> inquiredScoreList = new ArrayList<>();
 
+        //학생고유번호와 과목명이 일치하는 모든 회차의 데이터를 가져옴
+        try {
+            for (int i = 0; i < scoreStore.size(); i++) {
+                //학생 고유번호와 과목명이 일치할 때.
+                if (scoreStore.get(i).getStudentId().equals(studentId) && scoreStore.get(i).getSubjectId().equals(subjectName)) {
+                    Score score = scoreStore.get(i);
+                    inquiredScoreList.add(score);
+                }
+            }
+        }catch(Exception e) {
+            System.out.println("등급 조회 정보를 불러오는 중 문제가 발생했습니다.");
+            e.printStackTrace();
+        }
+        System.out.println();
         System.out.println("회차별 등급을 조회합니다...");
 
-
+        //가져온 데이터 리스트를 순회하며 출력 - 조회 형식 : 자유
+        for (int i = 0; i < inquiredScoreList.size(); i++) {
+            Score score = inquiredScoreList.get(i);
+            System.out.println("회차 정보 : "+score.getRound());
+            System.out.println("등급 정보 : "+score.getGrade());
+        }
+        System.out.println();
         // 기능 구현
         System.out.println("\n등급 조회 성공!");
     }
