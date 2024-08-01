@@ -218,9 +218,8 @@ public class CampManagementApplication {
         System.out.println("시험 점수를 등록합니다...");
 
 
-
         // 기능 구현
-        Score scoreID = new Score("4564", 1, 90,"156545");
+        Score scoreID = new Score("wefwe","erwer","idi",1,80);
         System.out.println(scoreID.getGrade());
 
         System.out.println("\n점수 등록 성공!");
@@ -239,7 +238,12 @@ public class CampManagementApplication {
     private static void inquireRoundGradeBySubject() {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         // 기능 구현 (조회할 특정 과목)
+
+
         System.out.println("회차별 등급을 조회합니다...");
+
+
+
         // 기능 구현
         System.out.println("\n등급 조회 성공!");
     }
