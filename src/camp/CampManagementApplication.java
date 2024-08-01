@@ -181,11 +181,19 @@ public class CampManagementApplication {
 
     // 수강생의 과목별 시험 회차 및 점수 등록
     private static void createScore() {
-        String studentId = getStudentId(); // 관리할 수강생 고유 번호
+        String studentId = getStudentId();// 관리할 수강생 고유 번호
+        System.out.println("과목 ID를 입력하세요 :");
+        String subjectId = sc.next();
+        System.out.println("회차를 입력하세요 :");
+        int round = sc.nextInt();
+        System.out.println("점수를 입력하세요 :");
+        int score = sc.nextInt();
+
+        Score scoreID = new Score(sequence(INDEX_TYPE_SCORE), studentId, subjectId, round, score);
+        scoreStore.add(scoreID);
+
         System.out.println("시험 점수를 등록합니다...");
 
-        // 기능 구현
-        Score scoreID = new Score("wefwe","erwer","idi",1,80);
         System.out.println(scoreID.getGrade());
 
         System.out.println("\n점수 등록 성공!");
