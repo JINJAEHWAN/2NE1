@@ -167,6 +167,7 @@ public class CampManagementApplication {
 
         Student student = new Student(sequence(INDEX_TYPE_STUDENT), studentName); // 수강생 인스턴스 생성 예시 코드
         // 기능 구현
+        studentStore.add(student);
         System.out.println("수강생 등록 성공!\n");
     }
 
@@ -174,6 +175,10 @@ public class CampManagementApplication {
     private static void inquireStudent() {
         System.out.println("\n수강생 목록을 조회합니다...");
         // 기능 구현
+        for (Student element : studentStore){
+            System.out.println(element.getStudentName());
+            System.out.println(element.getStudentId());
+        }
         System.out.println("\n수강생 목록 조회 성공!");
     }
 
@@ -211,6 +216,8 @@ public class CampManagementApplication {
     private static void createScore() {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         System.out.println("시험 점수를 등록합니다...");
+
+
 
         // 기능 구현
         Score scoreID = new Score("4564", 1, 90,"156545");
