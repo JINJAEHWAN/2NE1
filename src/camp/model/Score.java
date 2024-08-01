@@ -5,17 +5,19 @@ public class Score {
     private String scoreId;
     private String studentId;
     private String subjectId;
+    private String subjectName;
     private int round;
     private int score;
     private char grade;
 
     // Score 생성자 - 회차정보(사용자입력), score 점수를 기반으로 Score 인스턴스 생성시 자동으로 grade 값 할당.
-    public Score(String scoreId, String studentId, String subjectId, int round, int score) {
+    public Score(String scoreId, String studentId, int round, int score, String subjectId, String subjectName) {
         this.scoreId = scoreId;
         this.studentId = studentId;
         this.subjectId = subjectId;
         this.round = round;
         this.score = score;
+        this.subjectName = subjectName;
 
         if (score >= 95 && score <= 100) {
             this.grade = 'A';
@@ -56,6 +58,9 @@ public class Score {
     public char getGrade() {
         return grade;
     }
+
+    public String getSubjectName() { return subjectName; }
+
 
 
     // 점수 수정 메서드
