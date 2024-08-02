@@ -11,6 +11,7 @@ public class Student {
         this.c = condition.Green;
     }
 
+
     // Getter
     public String getStudentId() {
         return studentId;
