@@ -145,38 +145,18 @@ public class CampManagementApplication {
         String studentId = sc.next();
 
         boolean exist = false;
-        for (int i = 0; i < studentStore.size(); i++) {
-            if (studentStore.get(i).getStudentId().equals(studentId)) {
+        for(Student i : studentStore){
+            if(i.getStudentId().equals(studentId)){
                 exist = true;
+                i.getCondition();
                 break;
             }
         }
         if (!exist) {
             System.out.println("수강생을 찾을 수 없습니다.");
-            return;
         } else {
             System.out.println("수강생을 찾았습니다.");
         }
-
-//student condition찾기
-        for(Student i : studentStore){
-            if(i.getStudentId().equals(studentId)){
-                i.getCondition();
-            }
-
-//            if(i.getStudentId().equals(studentId)){
-//                if (i.getCondition()== Student.condition.Green){
-//                    System.out.println("Green");
-//                }else if (i.getCondition()== Student.condition.Red) {
-//                    System.out.println("Red");
-//                }else if (i.getCondition()== Student.condition.Yellow){
-//                    System.out.println("Yellow");
-//                }else {
-//                    System.out.println("잘못된 값.");
-//                }
-//            }
-        }
-
     }
 
     // 수강생 등록
@@ -277,7 +257,6 @@ public class CampManagementApplication {
     private static void updateRoundScoreBySubject() {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         // 기능 구현 (수정할 과목 및 회차, 점수)
-
         // studentStore에서 해당 studentId를 가진 수강생이 있는지 확인
         boolean exist = false;
         for (int i = 0; i < studentStore.size(); i++) {
