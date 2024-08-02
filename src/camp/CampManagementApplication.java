@@ -280,10 +280,10 @@ public class CampManagementApplication {
         //수정할 회차 입력
         int round;
         while (true) {
-            System.out.print("수정할 점수를 입력하세요: ");
+            System.out.print("수정할 회차를 입력하세요: ");
             round = sc.nextInt();
-            if (round > 100 || round < 1) {
-                System.out.println("잘못된 점수 입력입니다.");
+            if (round > 10 || round < 1) {
+                System.out.println("잘못된 회차 입력입니다.");
                 continue;
             }
             break;
@@ -294,7 +294,7 @@ public class CampManagementApplication {
         while (true) {
             System.out.print("수정할 점수를 입력하세요: ");
             newScore = sc.nextInt();
-            if (newScore > 10 || newScore < 1) {
+            if (newScore > 100 || newScore < 1) {
                 System.out.println("잘못된 점수 입력입니다.");
                 continue;
             }
