@@ -3,13 +3,15 @@ package camp.model;
 public class Student {
     private String studentId;
     private String studentName;
-    private Condition condition;
+    private condition c;
+
 
     public Student(String seq, String studentName) {
         this.studentId = seq;
         this.studentName = studentName;
-        this.condition = Condition.GREEN;
+        this.c = condition.Green;
     }
+
 
     // Getter
     public String getStudentId() {
@@ -20,15 +22,24 @@ public class Student {
         return studentName;
     }
 
-    public Condition getCondition() {
-        return condition;
+
+    public condition getCondition() {
+        System.out.println(this.c);
+        return c;
     }
 
-    public void setCondition(Condition condition) {
-        this.condition = condition;
+
+    // Setter
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
     }
 
-    public enum Condition {
-        GREEN, RED, YELLOW
+    public void setCondition(condition condition) {
+        this.c = condition;
+    }
+
+    public enum condition {
+        Green, Red, Yellow
     }
 }
+

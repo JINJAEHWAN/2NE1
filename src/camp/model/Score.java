@@ -10,6 +10,7 @@ public class Score {
     private char grade;
 
     // Score 생성자 - 회차정보(사용자입력), score 점수를 기반으로 Score 인스턴스 생성시 자동으로 grade 값 할당.
+    // subjectID값에 따라 필수 과목, 선택 과목 구분하여 등급 부여
     public Score(String scoreId, String studentId, int round, int score, String subjectId) {
         this.scoreId = scoreId;
         this.studentId = studentId;
@@ -17,20 +18,38 @@ public class Score {
         this.round = round;
         this.score = score;
 
-
-        if (score >= 95 && score <= 100) {
-            this.grade = 'A';
-        } else if (score >= 90 && score <= 94) {
-            this.grade = 'B';
-        } else if (score >= 80 && score <= 89) {
-            this.grade = 'C';
-        } else if (score >= 70 && score <= 79) {
-            this.grade = 'D';
-        } else if (score >= 60 && score <= 69) {
-            this.grade = 'F';
-        } else {
-            this.grade = 'N';
+        //과목 코드가 선택 과목 일 경우
+        if(subjectId.equals("SU6") || subjectId.equals("SU7") || subjectId.equals("SU8") || subjectId.equals("SU9")) {
+            if(score >=90 && score <=100) {
+                this.grade = 'A';
+            }else if(score >=80 && score <=89) {
+                this.grade = 'B';
+            }else if(score >=70 && score <=79) {
+                this.grade = 'C';
+            }else if(score >=60 && score <=69) {
+                this.grade = 'D';
+            }else if(score >=50 && score <=59) {
+                this.grade = 'F';
+            }else{
+                this.grade = 'N';
+            }
+        }//과목 코드가 필수 과목 일 경우
+        else{
+            if (score >= 95 && score <= 100) {
+                this.grade = 'A';
+            } else if (score >= 90 && score <= 94) {
+                this.grade = 'B';
+            } else if (score >= 80 && score <= 89) {
+                this.grade = 'C';
+            } else if (score >= 70 && score <= 79) {
+                this.grade = 'D';
+            } else if (score >= 60 && score <= 69) {
+                this.grade = 'F';
+            } else {
+                this.grade = 'N';
+            }
         }
+
     }
 
     // Getter
