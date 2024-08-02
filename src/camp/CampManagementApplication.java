@@ -129,11 +129,12 @@ public class CampManagementApplication {
             int input = sc.nextInt();
 
             switch (input) {
-                case 0 -> conditionStudent();
+                case 0 -> conditionStudent(); //수강생 컨디션 확인
                 case 1 -> createStudent(); // 수강생 등록
                 case 2 -> inquireStudent(); // 수강생 목록 조회
                 case 3 -> updateStudent();//수강생 정보 수정
                 case 4 -> getStudentInfo(); //수강생 정보 조회
+                case 5 -> deleteStudent(); // 수강생 삭제
                 case 6 -> flag = false; // 메인 화면 이동
                 default -> {
                     System.out.println("잘못된 입력입니다.\n메인 화면 이동...");
@@ -245,6 +246,20 @@ public class CampManagementApplication {
         System.out.println("\n수강생 목록 조회 성공!");
     }
 
+
+    // 수강생 삭제
+    private static void deleteStudent() {
+        System.out.println("\n수강생을 삭제합니다...");
+        System.out.println("삭제할 수강생 번호 입력: ");
+        String studentId = sc.next();
+
+        // 해당 수강생을 studentStored에서 제거 / 점수 기록 부분도 삭제가 되야되는데...?
+        boolean removed = studentStore.removeIf(student -> student.getStudentId().equals(studentId));
+        if(removed) {
+            scoreStore.removeIf(score -> score.getStudentId().equals(studentId));
+            System.out.println("수강생 및 점수 기록 삭제 성공!\n");
+        } else {
+            System.out.println("해당 번호의 수강생을 찾을 수 없습니다.\n");
     // 수강생 정보 조회
     private static void getStudentInfo() {
         System.out.print("정보를 조회할 수강생의 번호를 입력하세요 : ");
