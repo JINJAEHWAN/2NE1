@@ -25,6 +25,7 @@ public class Student {
         return c;
     }
 
+
     // Setter
     public void setStudentName(String studentName) {
         this.studentName = studentName;
@@ -38,3 +39,4 @@ public class Student {
         Green, Red, Yellow
     }
 }
+
