@@ -112,16 +112,23 @@ public class CampManagementApplication {
         while (flag) {
             System.out.println("==================================");
             System.out.println("수강생 관리 실행 중...");
+            // 0. 상태 관리
             System.out.println("1. 수강생 등록");
             System.out.println("2. 수강생 목록 조회");
-            System.out.println("3. 메인 화면 이동");
+            // 3. 수정
+            // 4. 상태 조회
+            System.out.println("5. 수강생 삭제");
+            System.out.println("6. 메인 화면 이동");
             System.out.print("관리 항목을 선택하세요...");
             int input = sc.nextInt();
 
             switch (input) {
                 case 1 -> createStudent(); // 수강생 등록
                 case 2 -> inquireStudent(); // 수강생 목록 조회
-                case 3 -> flag = false; // 메인 화면 이동
+                // case 3
+                // case 4
+                case 5 -> deleteStudent(); // 수강생 삭제
+                case 6 -> flag = false; // 메인 화면 이동
                 default -> {
                     System.out.println("잘못된 입력입니다.\n메인 화면 이동...");
                     flag = false;
@@ -153,6 +160,22 @@ public class CampManagementApplication {
             System.out.println("수강생 번호 "+element.getStudentId());
         }
         System.out.println("\n수강생 목록 조회 성공!");
+    }
+
+    // 수강생 삭제
+    private static void deleteStudent() {
+        System.out.println("\n수강생을 삭제합니다...");
+        System.out.println("삭제할 수강생 번호 입력: ");
+        String studentId = sc.next();
+
+        // 해당 수강생을 studentStored에서 제거 / 점수 기록 부분도 삭제가 되야되는데...?
+        boolean removed = studentStore.removeIf(student -> student.getStudentId().equals(studentId));
+        if(removed) {
+            scoreStore.removeIf(score -> score.getStudentId().equals(studentId));
+            System.out.println("수강생 및 점수 기록 삭제 성공!\n");
+        } else {
+            System.out.println("해당 번호의 수강생을 찾을 수 없습니다.\n");
+        }
     }
 
 
