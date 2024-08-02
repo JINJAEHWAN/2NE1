@@ -118,13 +118,15 @@ public class CampManagementApplication {
         while (flag) {
             System.out.println("==================================");
             System.out.println("수강생 관리 실행 중...");
+
             System.out.println("0. 수강생 상태");
             System.out.println("1. 수강생 등록");
             System.out.println("2. 수강생 목록 조회");
             System.out.println("3. 수강생 정보 수정");
             System.out.println("4. 수강생 정보 조회");
             System.out.println("5. 수강생 정보 삭제");
-            System.out.println("6. 메인 화면 이동");
+            System.out.println("6. 수강생 상태 목록 조회");
+            System.out.println("7. 메인 화면 이동");
             System.out.print("관리 항목을 선택하세요...");
             int input = sc.nextInt();
 
@@ -135,7 +137,8 @@ public class CampManagementApplication {
                 case 3 -> updateStudent();//수강생 정보 수정
                 case 4 -> getStudentInfo(); //수강생 정보 조회
                 case 5 -> deleteStudent(); // 수강생 삭제
-                case 6 -> flag = false; // 메인 화면 이동
+                case 6 -> inquireCondition(); //수강생 상태목록조회
+                case 7 -> flag = false; // 메인 화면 이동
                 default -> {
                     System.out.println("잘못된 입력입니다.\n메인 화면 이동...");
                     flag = false;
@@ -244,6 +247,20 @@ public class CampManagementApplication {
             System.out.println("수강생 번호 " + element.getStudentId());
         }
         System.out.println("\n수강생 목록 조회 성공!");
+    }
+
+    // 상태별 수강생 목록 조회(4)
+    private static void inquireCondition() {
+        System.out.print("조회할 상태를 입력하세요 (GREEN, RED, YELLOW): ");
+        String condition = sc.next();
+
+
+        for (Student student : studentStore) {
+            if (student.getCondition().name().equals(condition)) {
+                System.out.println(condition + " 상태 수강생 목록을 조회합니다.");
+                System.out.println("수강생 번호: " + student.getStudentId() + ", 이름: " + student.getStudentName() + ", 상태: " + student.getCondition());
+            }
+        }
     }
 
 
