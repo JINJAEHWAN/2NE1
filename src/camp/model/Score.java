@@ -5,7 +5,6 @@ public class Score {
     private String scoreId;
     private String studentId;
     private String subjectId;
-    private String subjectName;
     private int round;
     private int score;
     private char grade;
@@ -17,7 +16,7 @@ public class Score {
         this.subjectId = subjectId;
         this.round = round;
         this.score = score;
-        this.subjectName = subjectName;
+
 
         if (score >= 95 && score <= 100) {
             this.grade = 'A';
@@ -59,7 +58,6 @@ public class Score {
         return grade;
     }
 
-    public String getSubjectName() { return subjectName; }
 
 
 
