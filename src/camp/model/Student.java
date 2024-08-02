@@ -1,14 +1,18 @@
 package camp.model;
 
+import java.util.List;
+
 public class Student {
     private String studentId;
     private String studentName;
+    private List<Subject> subjectList;
     private condition c;
 
 
-    public Student(String seq, String studentName) {
+    public Student(String seq, String studentName, List<Subject> subjectList) {
         this.studentId = seq;
         this.studentName = studentName;
+        this.subjectList = subjectList;
         this.c = condition.Green;
     }
 
@@ -22,9 +26,11 @@ public class Student {
         return studentName;
     }
 
+    public List<Subject> getSubjectList() {
+        return subjectList;
+    }
 
     public condition getCondition() {
-        System.out.println(this.c);
         return c;
     }
 
@@ -36,6 +42,10 @@ public class Student {
 
     public void setCondition(condition condition) {
         this.c = condition;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subjectList.add(subject);
     }
 
     public enum condition {
