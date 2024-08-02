@@ -25,9 +25,18 @@ public class Student {
         return c;
     }
 
+
+    // Setter
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public void setCondition(condition condition) {
+        this.c = condition;
+    }
+
     public enum condition {
         Green, Red, Yellow
     }
 }
-
 

@@ -116,12 +116,13 @@ public class CampManagementApplication {
         while (flag) {
             System.out.println("==================================");
             System.out.println("수강생 관리 실행 중...");
-            System.out.println("0. 수강생 컨디션 관리");
+
+            System.out.println("0. 수강생 상태 관리");
             System.out.println("1. 수강생 등록");
             System.out.println("2. 수강생 목록 조회");
-            System.out.println("3. 수강생 수정");
-            System.out.println("4. 상태 조회");
-            System.out.println("5. 수강생 삭제");
+            System.out.println("3. 수강생 정보 수정");
+            System.out.println("4. 상태별 수강생 목록 조회 ");
+            System.out.println("5. 수강생 삭제 ");
             System.out.println("6. 메인 화면 이동");
             System.out.print("관리 항목을 선택하세요...");
             int input = sc.nextInt();
@@ -130,7 +131,8 @@ public class CampManagementApplication {
                 case 0 -> conditionStudent();
                 case 1 -> createStudent(); // 수강생 등록
                 case 2 -> inquireStudent(); // 수강생 목록 조회
-                case 3 -> flag = false; // 메인 화면 이동
+                case 3 -> updateStudent();//수강생 정보 수정
+                case 6 -> flag = false; // 메인 화면 이동
                 default -> {
                     System.out.println("잘못된 입력입니다.\n메인 화면 이동...");
                     flag = false;
@@ -172,13 +174,71 @@ public class CampManagementApplication {
         System.out.println("수강생 등록 성공!\n");
     }
 
+    // 수강생 정보를 수정 - 이름 또는 상태를 입력받아서 수정
+    private static void updateStudent() {
+        System.out.println("\n수강생 정보를 수정합니다...");
+        String studentId = getStudentId();
+
+        //studentStore에서 해당 studentId를 가진 수강생이 있는지 확인
+        Student stuname = null;
+        for (int i = 0; i < studentStore.size(); i++) {
+            if (studentStore.get(i).getStudentId().equals(studentId)) {
+                stuname = studentStore.get(i);
+                break;
+            }
+        }
+        // 해당 ID를 가진 수강생을 찾지 못한 경우
+        if (stuname == null) {
+            System.out.println("수강생을 찾을 수 없습니다.");
+            return;
+        } else {
+            System.out.println("수강생을 찾았습니다.");
+        }
+
+        System.out.println("수정할 항목을 입력하세요 (이름/상태) :");
+        String change = sc.next();
+
+        switch (change) {
+            case "이름" -> {
+                while (true){
+                    System.out.println("수정할 이름을 입력하세요: ");
+                    String newName = sc.next();
+                    if (newName.isEmpty()) {
+                        System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+                    } else {
+                        stuname.setStudentName(newName);
+                        System.out.println("이름 수정 성공!");
+                        break;
+                    }
+                }
+            }
+            case "상태" -> {
+                while (true) {
+                    System.out.println("수정할 상태를 입력하세요 (Green, Red, Yellow): ");
+                    String newCondition = sc.next();
+                    if (newCondition.equals("Green") || newCondition.equals("Red") || newCondition.equals("Yellow")) {
+                        stuname.setCondition(Student.condition.valueOf(newCondition));
+                        System.out.println("상태 수정 성공!");
+                        System.out.println(stuname.getCondition());
+                        break;
+                    } else {
+                        System.out.println("잘못된 상태 입력입니다. 다시 입력해주세요.");
+                    }
+                }
+            }
+            default -> {
+                System.out.println("잘못된 입력입니다.");
+            }
+        }
+    }
+
     // 수강생 목록 조회
     private static void inquireStudent() {
         System.out.println("\n수강생 목록을 조회합니다...");
         // 기능 구현
         for (Student element : studentStore) {
-            System.out.println("수강생 이름 "+element.getStudentName());
-            System.out.println("수강생 번호 "+element.getStudentId());
+            System.out.println("수강생 이름 " + element.getStudentName());
+            System.out.println("수강생 번호 " + element.getStudentId());
         }
         System.out.println("\n수강생 목록 조회 성공!");
     }
