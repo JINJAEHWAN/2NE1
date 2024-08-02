@@ -264,12 +264,28 @@ public class CampManagementApplication {
         }
 
         //수정할 회차 입력
-        System.out.print("수정할 회차를 입력하세요: ");
-        int round = sc.nextInt();
+        int round;
+        while (true) {
+            System.out.print("수정할 점수를 입력하세요: ");
+            round = sc.nextInt();
+            if (round > 100 || round < 1) {
+                System.out.println("잘못된 점수 입력입니다.");
+                continue;
+            }
+            break;
+        }
 
         //수정할 점수 입력
-        System.out.print("수정할 점수를 입력하세요: ");
-        int newScore = sc.nextInt();
+        int newScore;
+        while (true) {
+            System.out.print("수정할 점수를 입력하세요: ");
+            newScore = sc.nextInt();
+            if (newScore > 10 || newScore < 1) {
+                System.out.println("잘못된 점수 입력입니다.");
+                continue;
+            }
+            break;
+        }
 
         //점수수정
         boolean update = false;
