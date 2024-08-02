@@ -55,17 +55,12 @@ public class CampManagementApplication {
     // 초기 데이터 생성
     private static void setInitData() {
 
-        studentStore = List.of(new Student(sequence(INDEX_TYPE_STUDENT), "cho"), new Student(sequence(INDEX_TYPE_STUDENT),"bo"));
+        studentStore = List.of(new Student(sequence(INDEX_TYPE_STUDENT), "cho"), new Student(sequence(INDEX_TYPE_STUDENT), "bo"));
         subjectStore = List.of(new Subject(sequence(INDEX_TYPE_SUBJECT), "Java", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "객체지향", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "JPA", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "MySQL", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "디자인 패턴", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring Security", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "Redis", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "MongoDB", SUBJECT_TYPE_CHOICE));
 
         scoreStore = new ArrayList<>();
-       
-        // 더미 학생 데이터 생성
-        studentStore.add(new Student(sequence(INDEX_TYPE_STUDENT), "홍길동"));
 
-        // 더미 점수 데이터 생성
-        scoreStore.add(new Score(sequence(INDEX_TYPE_SCORE), "ST1", 1, 98, "SU1"));
-        scoreStore.add(new Score(sequence(INDEX_TYPE_SCORE), "ST1", 1, 70, "SU2"));
+
     }
 
     // index 자동 증가
@@ -192,17 +187,33 @@ public class CampManagementApplication {
     // 수강생의 과목별 시험 회차 및 점수 등록
     private static void createScore() {
         String studentId = getStudentId();// 관리할 수강생 고유 번호
+
         System.out.println("과목 ID를 입력하세요 :");
         String subjectID = sc.next();
-        System.out.println("과목명을 입력하세요 :");
-        String subjectname = sc.next();
-        System.out.println("회차를 입력하세요 :");
-        int round = sc.nextInt();
-        System.out.println("점수를 입력하세요 :");
-        int score = sc.nextInt();
+
+        int round;
+        while (true) {
+            System.out.println("회차를 입력하세요 (1~10) :");
+            round = sc.nextInt();
+            if (round >= 1 && round <= 10) {
+                break;
+            } else {
+                System.out.println("잘못된 입력입니다. 1~10회차 중 입력해주세요.");
+            }
+        }
+
+        int score;
+        while (true) {
+            System.out.println("점수를 입력하세요 :");
+            score = sc.nextInt();
+            if (score >= 0 && score <= 100) {
+                break;
+            } else {
+                System.out.println("잘못된 입력입니다. 0~100점 사이로 입력해주세요.");
+            }
+        }
 
         Score scoreID = new Score(sequence(INDEX_TYPE_SCORE), studentId, round, score, subjectID);
-
         scoreStore.add(scoreID);
 
         System.out.println("시험 점수를 등록합니다...");
@@ -253,13 +264,13 @@ public class CampManagementApplication {
         boolean exist3 = false;
         for (int i = 0; i < scoreStore.size(); i++) {
             Score score = scoreStore.get(i);
-            if (score.getStudentId().equals(studentId)&&score.getSubjectId().equals(subjectId)) {
+            if (score.getStudentId().equals(studentId) && score.getSubjectId().equals(subjectId)) {
                 System.out.println(", 회차: " + score.getRound() + ", 점수: " + score.getScore() + ", 등급: " + score.getGrade());
                 exist3 = true;
             }
         }
 
-        if (!exist3){
+        if (!exist3) {
             System.out.printf("해당 수강생의 점수가 비어있습니다.");
         }
 
@@ -313,7 +324,7 @@ public class CampManagementApplication {
                     inquiredScoreList.add(score);
                 }
             }
-        }catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("등급 조회 정보를 불러오는 중 문제가 발생했습니다.");
             e.printStackTrace();
         }
@@ -323,8 +334,8 @@ public class CampManagementApplication {
         //가져온 데이터 리스트를 순회하며 출력 - 조회 형식 : 자유
         for (int i = 0; i < inquiredScoreList.size(); i++) {
             Score score = inquiredScoreList.get(i);
-            System.out.println("회차 정보 : "+score.getRound());
-            System.out.println("등급 정보 : "+score.getGrade());
+            System.out.println("회차 정보 : " + score.getRound());
+            System.out.println("등급 정보 : " + score.getGrade());
         }
         System.out.println();
         // 기능 구현
