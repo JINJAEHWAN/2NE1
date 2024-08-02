@@ -57,6 +57,7 @@ public class CampManagementApplication {
 
         studentStore = new ArrayList<>();
 
+        // 선택과목 - SU6 = "디자인 패턴"  SU9 = "MongoDB"
         subjectStore = List.of(new Subject(sequence(INDEX_TYPE_SUBJECT), "Java", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "객체지향", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "JPA", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "MySQL", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "디자인 패턴", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring Security", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "Redis", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "MongoDB", SUBJECT_TYPE_CHOICE));
         scoreStore = new ArrayList<>();
         Student student = new Student(sequence(INDEX_TYPE_STUDENT), "bo"); // 수강생 인스턴스 생성 예시 코드
@@ -112,16 +113,21 @@ public class CampManagementApplication {
         while (flag) {
             System.out.println("==================================");
             System.out.println("수강생 관리 실행 중...");
+            System.out.println("0. 수강생 상태");
             System.out.println("1. 수강생 등록");
             System.out.println("2. 수강생 목록 조회");
-            System.out.println("3. 메인 화면 이동");
+            System.out.println("3. 수강생 정보 수정");
+            System.out.println("4. 수강생 정보 조회");
+            System.out.println("5. 수강생 정보 삭제");
+            System.out.println("6. 메인 화면 이동");
             System.out.print("관리 항목을 선택하세요...");
             int input = sc.nextInt();
 
             switch (input) {
                 case 1 -> createStudent(); // 수강생 등록
                 case 2 -> inquireStudent(); // 수강생 목록 조회
-                case 3 -> flag = false; // 메인 화면 이동
+                case 4 -> getStudentInfo(); //수강생 정보 조회
+                case 6 -> flag = false; // 메인 화면 이동
                 default -> {
                     System.out.println("잘못된 입력입니다.\n메인 화면 이동...");
                     flag = false;
@@ -149,10 +155,43 @@ public class CampManagementApplication {
         System.out.println("\n수강생 목록을 조회합니다...");
         // 기능 구현
         for (Student element : studentStore) {
-            System.out.println("수강생 이름 "+element.getStudentName());
-            System.out.println("수강생 번호 "+element.getStudentId());
+            System.out.println("수강생 이름 " + element.getStudentName());
+            System.out.println("수강생 번호 " + element.getStudentId());
         }
         System.out.println("\n수강생 목록 조회 성공!");
+    }
+
+    // 수강생 정보 조회
+    private static void getStudentInfo() {
+        System.out.print("정보를 조회할 수강생의 번호를 입력하세요 : ");
+        String studentId = sc.next();
+        boolean flag = false;
+        Student student = null;
+        try {
+            for (Student element : studentStore) {
+                if (studentId.equals(element.getStudentId())) {
+                    System.out.println("조회할 수강생의 정보를 찾았습니다.");
+                    flag = true;
+                    student = element;
+                    break;
+                }
+            }
+            //studentStore에 수강생이 없다면 예외 throw후 빠져나옴.
+            if (!flag) {
+                throw new Exception("조회할 수강생의 정보가 없습니다.");
+            }
+
+            //수강생이 있다면, 정보를 출력
+            System.out.println("수강생 번호 : " + student.getStudentId());
+            System.out.println("수강생 이름 : " + student.getStudentName());
+            //System.out.println("수강생 상태 : " + student.getCondition());
+            //System.out.println("선택한 과목명 : " +student.getSubjects());
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            System.out.println("수강생 정보 조회를 마칩니다.");
+        }
     }
 
 
@@ -190,12 +229,12 @@ public class CampManagementApplication {
     private static void createScore() {
         String studentId = getStudentId();// 관리할 수강생 고유 번호
 
-        System.out.println("과목 ID를 입력하세요 :");
+        System.out.print("과목 코드를 입력하세요 : ");
         String subjectID = sc.next();
 
         int round;
         while (true) {
-            System.out.println("회차를 입력하세요 (1~10) :");
+            System.out.print("회차를 입력하세요 (1~10) : ");
             round = sc.nextInt();
             if (round >= 1 && round <= 10) {
                 break;
@@ -206,7 +245,7 @@ public class CampManagementApplication {
 
         int score;
         while (true) {
-            System.out.println("점수를 입력하세요 :");
+            System.out.println("점수를 입력하세요 : ");
             score = sc.nextInt();
             if (score >= 0 && score <= 100) {
                 break;
