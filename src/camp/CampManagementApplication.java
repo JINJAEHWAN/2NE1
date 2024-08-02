@@ -56,6 +56,7 @@ public class CampManagementApplication {
     private static void setInitData() {
 
         studentStore = new ArrayList<>();
+
         subjectStore = List.of(new Subject(sequence(INDEX_TYPE_SUBJECT), "Java", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "객체지향", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "JPA", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "MySQL", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "디자인 패턴", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring Security", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "Redis", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "MongoDB", SUBJECT_TYPE_CHOICE));
 
         scoreStore = new ArrayList<>();
@@ -262,6 +263,7 @@ public class CampManagementApplication {
         // 선택된 학생의 모든 과목과 회차, 점수 출력
         System.out.println("해당 수강생의 " + subjectId + " 과목 점수 목록:");
         boolean exist3 = false;
+
         for (int i = 0; i < scoreStore.size(); i++) {
             Score score = scoreStore.get(i);
             if (score.getStudentId().equals(studentId) && score.getSubjectId().equals(subjectId)) {
@@ -307,8 +309,11 @@ public class CampManagementApplication {
         // 조회(관리)할 수강생의 고유 번호
         System.out.println("조회할 학생의 고유 번호를 입력해주세요 : ");
         String studentId = getStudentId();
-        System.out.print("조회할 과목명을 입력해주세요 : ");
-        String subjectName = sc.next();
+        //과목명이 아니라 과목 코드 입력
+        System.out.print("조회할 과목코드를 입력해주세요 : ");
+        String subjectId = sc.next();
+//        System.out.print("조회할 과목명을 입력해주세요 : ");
+//        String subjectName = sc.next();
         sc.nextLine();
 
         //해당 학생Id를 기본키로 데이터 조회 - 그 학생Id의 특정 과목에 대한 모든 데이터를 가져와야함.
@@ -319,7 +324,7 @@ public class CampManagementApplication {
         try {
             for (int i = 0; i < scoreStore.size(); i++) {
                 //학생 고유번호와 과목명이 일치할 때.
-                if (scoreStore.get(i).getStudentId().equals(studentId) && scoreStore.get(i).getSubjectId().equals(subjectName)) {
+                if (scoreStore.get(i).getStudentId().equals(studentId) && scoreStore.get(i).getSubjectId().equals(subjectId)) {
                     Score score = scoreStore.get(i);
                     inquiredScoreList.add(score);
                 }
