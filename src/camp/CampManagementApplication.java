@@ -57,7 +57,11 @@ public class CampManagementApplication {
 
         studentStore = new ArrayList<>();
 
-        subjectStore = List.of(new Subject(sequence(INDEX_TYPE_SUBJECT), "Java", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "객체지향", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "JPA", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "MySQL", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "디자인 패턴", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring Security", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "Redis", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "MongoDB", SUBJECT_TYPE_CHOICE));
+        subjectStore = List.of(new Subject(sequence(INDEX_TYPE_SUBJECT), "Java", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "객체지향", SUBJECT_TYPE_MANDATORY),
+                new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring", SUBJECT_TYPE_MANDATORY), new Subject(sequence(INDEX_TYPE_SUBJECT), "JPA", SUBJECT_TYPE_MANDATORY),
+                new Subject(sequence(INDEX_TYPE_SUBJECT), "MySQL", SUBJECT_TYPE_MANDATORY),
+                new Subject(sequence(INDEX_TYPE_SUBJECT), "디자인 패턴", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring Security", SUBJECT_TYPE_CHOICE),
+                new Subject(sequence(INDEX_TYPE_SUBJECT), "Redis", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "MongoDB", SUBJECT_TYPE_CHOICE));
         scoreStore = new ArrayList<>();
         Student student = new Student(sequence(INDEX_TYPE_STUDENT), "bo"); // 수강생 인스턴스 생성 예시 코드
         studentStore.add(student);
@@ -112,13 +116,18 @@ public class CampManagementApplication {
         while (flag) {
             System.out.println("==================================");
             System.out.println("수강생 관리 실행 중...");
+            System.out.println("0. 수강생 컨디션 관리");
             System.out.println("1. 수강생 등록");
             System.out.println("2. 수강생 목록 조회");
-            System.out.println("3. 메인 화면 이동");
+            System.out.println("3. 수강생 수정");
+            System.out.println("4. 상태 조회");
+            System.out.println("5. 수강생 삭제");
+            System.out.println("6. 메인 화면 이동");
             System.out.print("관리 항목을 선택하세요...");
             int input = sc.nextInt();
 
             switch (input) {
+                case 0 -> conditionStudent();
                 case 1 -> createStudent(); // 수강생 등록
                 case 2 -> inquireStudent(); // 수강생 목록 조회
                 case 3 -> flag = false; // 메인 화면 이동
@@ -130,13 +139,52 @@ public class CampManagementApplication {
         }
     }
 
+    private static void conditionStudent(){
+        System.out.println("수강생의 컨디션을 확인합니다...");
+        System.out.print("수강생 번호 입력: ");
+        String studentId = sc.next();
+
+        boolean exist = false;
+        for (int i = 0; i < studentStore.size(); i++) {
+            if (studentStore.get(i).getStudentId().equals(studentId)) {
+                exist = true;
+                break;
+            }
+        }
+        if (!exist) {
+            System.out.println("수강생을 찾을 수 없습니다.");
+            return;
+        } else {
+            System.out.println("수강생을 찾았습니다.");
+        }
+
+//student condition찾기
+        for(Student i : studentStore){
+            if(i.getStudentId().equals(studentId)){
+                i.getCondition();
+            }
+
+//            if(i.getStudentId().equals(studentId)){
+//                if (i.getCondition()== Student.condition.Green){
+//                    System.out.println("Green");
+//                }else if (i.getCondition()== Student.condition.Red) {
+//                    System.out.println("Red");
+//                }else if (i.getCondition()== Student.condition.Yellow){
+//                    System.out.println("Yellow");
+//                }else {
+//                    System.out.println("잘못된 값.");
+//                }
+//            }
+        }
+
+    }
+
     // 수강생 등록
     private static void createStudent() {
         System.out.println("\n수강생을 등록합니다...");
         System.out.print("수강생 이름 입력: ");
         String studentName = sc.next();
         // 기능 구현 (필수 과목, 선택 과목)
-
         Student student = new Student(sequence(INDEX_TYPE_STUDENT), studentName); // 수강생 인스턴스 생성 예시 코드
 
         // 기능 구현
