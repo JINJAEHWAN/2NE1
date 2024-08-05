@@ -148,6 +148,7 @@ public class CampManagementApplication {
             }
         }
     }
+
     //수강생 컨디션 확인 (0)
     private static void conditionStudent() {
         System.out.println("수강생의 컨디션을 확인합니다...");
@@ -193,7 +194,7 @@ public class CampManagementApplication {
                 }
                 String mandatoryCode = sc.next();
                 //정해진 과목 코드 이외의 문자 입력시 예외 throw
-                if(mandatoryCode.equals("q")||mandatoryCode.equals("Q")) {
+                if (mandatoryCode.equals("q") || mandatoryCode.equals("Q")) {
                     System.out.println("q를 입력받았습니다, 선택 과목 입력으로 넘어갑니다.");
                     break;
                 }
@@ -252,7 +253,7 @@ public class CampManagementApplication {
 
                 String choiceCode = sc.next();
                 //정해진 과목 코드 이외의 문자 입력시 예외 throw
-                if(choiceCode.equals("q")||choiceCode.equals("Q")) {
+                if (choiceCode.equals("q") || choiceCode.equals("Q")) {
                     System.out.println("q를 입력받았습니다, 선택 과목 입력을 종료합니다...");
                     break;
                 }
@@ -508,17 +509,16 @@ public class CampManagementApplication {
         int score;
         while (true) {
             studentId = getStudentId();// 관리할 수강생 고유 번호
-            try{
-                for(Student s : studentStore){
+            try {
+                for (Student s : studentStore) {
                     if (studentId.equals(s.getStudentId())) {
                         System.out.println("수강생 코드 입력 완료!");
                         subjectList = s.getSubjectList();
-                    }
-                    else {
+                    } else {
                         throw new Exception("수강생 코드가 존재하지 않습니다.");
                     }
                 }
-            }catch (Exception exception){
+            } catch (Exception exception) {
                 System.out.println("에러메세지:" + exception.getMessage());
                 continue;
             }
@@ -535,7 +535,7 @@ public class CampManagementApplication {
                         //IF 학생이 선택한 과목이 맞다면....
                     }
                 }
-                if (!flag){
+                if (!flag) {
                     throw new Exception("수강신청을 하지 않았습니다.");
                 }
             } catch (Exception exception) {
@@ -544,34 +544,27 @@ public class CampManagementApplication {
             }
             System.out.print("회차를 입력하세요 (1~10) : ");
             round = sc.nextInt();
-            try{
-                if(round >=1 && round <=10){
+            try {
+                if (round >= 1 && round <= 10) {
                     System.out.println("회차 입력 완료!");
-                }
-                else{
+                } else {
                     throw new Exception("회차 정보와 다릅니다.");
-                    }
-            }
-            catch(Exception exception){
+                }
+            } catch (Exception exception) {
                 System.out.println("에러메세지:" + exception.getMessage());
                 continue;
             }
 
-        }
-
-        int score;
-        while (true) {
             System.out.println("점수를 입력하세요 : ");
             score = sc.nextInt();
-            try{
-                if(score>=0 && score<= 100){
+            try {
+                if (score >= 0 && score <= 100) {
                     System.out.println("점수 입력 완료!");
                     break;
-                }
-                else{
+                } else {
                     throw new Exception("점수는 0부터 100까지입니다.");
                 }
-            }catch (Exception exception){
+            } catch (Exception exception) {
                 System.out.println("에러메세지:" + exception.getMessage());
             }
         }
@@ -773,7 +766,7 @@ public class CampManagementApplication {
                 }
 
                 //평균값 저장 0으로 나누는 경우에 대한 처리는 if문 이외에는 불필요.
-                if(count != 0){
+                if (count != 0) {
                     avgScore[i] = sum / count;
                 }
 
@@ -784,7 +777,7 @@ public class CampManagementApplication {
             //저장된 과목 리스트와 평균값 출력
             //두 저장소는 동일한 길이를 가짐
             for (int i = 0; i < avgScore.length; i++) {
-                System.out.println(inquiredSubjectList.get(i).getSubjectName()+" : "+avgScore[i]);
+                System.out.println(inquiredSubjectList.get(i).getSubjectName() + " : " + avgScore[i]);
             }
 
 
