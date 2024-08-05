@@ -4,7 +4,6 @@ import camp.model.Score;
 import camp.model.Student;
 import camp.model.Subject;
 
-import java.net.SecureCacheResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -65,10 +64,10 @@ public class CampManagementApplication {
                 new Subject(sequence(INDEX_TYPE_SUBJECT), "Redis", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "MongoDB", SUBJECT_TYPE_CHOICE));
 
         scoreStore = new ArrayList<>();
-        //Student student = new Student(sequence(INDEX_TYPE_STUDENT), "bo"); // 수강생 인스턴스 생성 예시 코드
-        //studentStore.add(student);
-        Score scoreID = new Score(sequence(INDEX_TYPE_SCORE), "ST1", 1, 95, "SU1");
-        scoreStore.add(scoreID);
+
+        //불필요한 더미데이터
+        //Score scoreID = new Score(sequence(INDEX_TYPE_SCORE), "ST1", 1, 95, "SU1");
+        //scoreStore.add(scoreID);
     }
 
     // index 자동 증가
@@ -193,7 +192,7 @@ public class CampManagementApplication {
                 }
                 String mandatoryCode = sc.next();
                 //정해진 과목 코드 이외의 문자 입력시 예외 throw
-                if(mandatoryCode.equals("q")) {
+                if (mandatoryCode.equals("q")) {
                     System.out.println("q를 입력받았습니다, 선택 과목 입력으로 넘어갑니다.");
                     break;
                 }
@@ -252,7 +251,7 @@ public class CampManagementApplication {
 
                 String choiceCode = sc.next();
                 //정해진 과목 코드 이외의 문자 입력시 예외 throw
-                if(choiceCode.equals("q")) {
+                if (choiceCode.equals("q")) {
                     System.out.println("q를 입력받았습니다, 선택 과목 입력을 종료합니다.");
                     break;
                 }
@@ -446,6 +445,7 @@ public class CampManagementApplication {
     }
 
 
+    //점수 관리 메뉴 화면
     private static void displayScoreView() {
         boolean flag = true;
         while (flag) {
@@ -454,7 +454,8 @@ public class CampManagementApplication {
             System.out.println("1. 수강생의 과목별 시험 회차 및 점수 등록");
             System.out.println("2. 수강생의 과목별 회차 점수 수정");
             System.out.println("3. 수강생의 특정 과목 회차별 등급 조회");
-            System.out.println("4. 메인 화면 이동");
+            System.out.println("4. 수강생의 과목별 평균 등급 조회");             //0805 구현부
+            System.out.println("5. 메인 화면 이동");
             System.out.print("관리 항목을 선택하세요...");
             int input = sc.nextInt();
 
@@ -462,7 +463,8 @@ public class CampManagementApplication {
                 case 1 -> createScore(); // 수강생의 과목별 시험 회차 및 점수 등록
                 case 2 -> updateRoundScoreBySubject(); // 수강생의 과목별 회차 점수 수정
                 case 3 -> inquireRoundGradeBySubject(); // 수강생의 특정 과목 회차별 등급 조회
-                case 4 -> flag = false; // 메인 화면 이동
+                case 4 -> inquireAverageGradeBySubject();      // 수강생의 과목별 평균 등급 조회
+                case 5 -> flag = false; // 메인 화면 이동
                 default -> {
                     System.out.println("잘못된 입력입니다.\n메인 화면 이동...");
                     flag = false;
@@ -496,8 +498,9 @@ public class CampManagementApplication {
 
         int score;
         while (true) {
-            System.out.println("점수를 입력하세요 : ");
+            System.out.print("점수를 입력하세요 : ");
             score = sc.nextInt();
+            sc.nextLine();
             if (score >= 0 && score <= 100) {
                 break;
             } else {
@@ -615,7 +618,7 @@ public class CampManagementApplication {
         // 조회(관리)할 수강생의 고유 번호
         System.out.println("조회할 학생의 고유 번호를 입력해주세요 : ");
         String studentId = getStudentId();
-        //과목명이 아니라 과목 코드 입력
+        //과목 코드 입력
         System.out.print("조회할 과목코드를 입력해주세요 : ");
         String subjectId = sc.next();
         sc.nextLine();
@@ -649,6 +652,78 @@ public class CampManagementApplication {
         System.out.println();
         // 기능 구현
         System.out.println("\n등급 조회 성공!");
+    }
+
+    // 수강생의 과목별 평균 등급 조회
+    private static void inquireAverageGradeBySubject() {
+        // 기능 구현 (조회할 특정 학생)
+        // 조회(관리)할 수강생의 고유 번호
+        String studentId = getStudentId();
+
+        //studentStore에서 해당 studentId를 가진 수강생이 있는지 확인
+        Student studentname = null;
+        for (int i = 0; i < studentStore.size(); i++) {
+            if (studentStore.get(i).getStudentId().equals(studentId)) {
+                studentname = studentStore.get(i);
+                break;
+            }
+        }
+        // 해당 ID를 가진 수강생을 찾지 못한 경우
+        if (studentname == null) {
+            System.out.println("수강생을 찾을 수 없습니다.");
+            return;
+        } else {
+            System.out.println("수강생을 찾았습니다.");
+        }
+        System.out.println();
+
+        System.out.println("과목별 평균 등급을 조회할 학생 : " + studentname.getStudentName());
+        try {
+            //과목별 평균 등급 조회 - 특정 과목별 1~10회차 의 합 / 시행한 회차
+            //inquiredSubjectList에는 학생이 수강신청한 과목이 순서대로
+            List<Subject> inquiredSubjectList = studentname.getSubjectList();
+            int[] avgScore = new int[inquiredSubjectList.size()];
+
+            //inquiredScoreList는 inquiredSubjectList를 하나 꺼낼때마다 그 과목의 회차별 점수를 저장.
+            for (int i = 0; i < inquiredSubjectList.size(); i++) {
+                Subject inquiredSubject = inquiredSubjectList.get(i);
+                //꺼낸 과목의 회차 별 Score 누적 합을 저장할 변수 sum, 회차 수를 판단할 변수 count - 이 둘은 판단할 과목마다 초기화되어야함
+                int sum = 0;
+                int count = 0;
+
+                // score 저장소를 탐색
+                for (int j = 0; j < scoreStore.size(); j++) {
+                    Score iterScore = scoreStore.get(j);
+
+                    // 순서대로 꺼낸 iterScore의 과목 코드와 inquiredSubject의 과목코드가 일치하고, 학생 코드 값이 일치하면 카운트
+                    if (iterScore.getSubjectId().equals(inquiredSubject.getSubjectId()) && iterScore.getStudentId().equals(studentId)) {
+                        sum += iterScore.getScore();
+                        count++;
+                    }
+
+                }
+
+                //평균값 저장 0으로 나누는 경우에 대한 처리는 if문 이외에는 불필요.
+                if(count != 0){
+                    avgScore[i] = sum / count;
+                }
+
+
+            }
+            System.out.println("학생의 과목별 평균 등급을 조회합니다");
+            System.out.println("==================================");
+            //저장된 과목 리스트와 평균값 출력
+            //두 저장소는 동일한 길이를 가짐
+            for (int i = 0; i < avgScore.length; i++) {
+                System.out.println(inquiredSubjectList.get(i).getSubjectName()+" : "+avgScore[i]);
+            }
+
+
+        } catch (Exception e) {
+            System.out.println("수강생의 과목별 평균 등급을 구하는 과정에 문제가 발생했습니다.");
+            System.out.println("이전 단계로 돌아갑니다.");
+            return;
+        }
     }
 
 }
