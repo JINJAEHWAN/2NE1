@@ -160,7 +160,7 @@ public class CampManagementApplication {
         for (Student i : studentStore) {
             if (i.getStudentId().equals(studentId)) {
                 exist = true;
-                i.getCondition();
+                System.out.println(i.getCondition());
                 break;
             }
         }
@@ -341,7 +341,7 @@ public class CampManagementApplication {
             System.out.println("수강생을 찾았습니다.");
         }
 
-        System.out.println("수정할 항목을 입력하세요…(이름, 상태)");
+        System.out.println("수정할 항목을 입력하세요…(이름 또는 상태를 입력하세요.)");
         String change = sc.next();
 
         switch (change) {
@@ -380,7 +380,7 @@ public class CampManagementApplication {
 
     // 수강생 정보 조회(4)
     private static void getStudentInfo() {
-        System.out.print("정보를 조회할 수강생의 번호를 입력하세요 : ");
+        System.out.print("정보를 조회할 수강생의 번호를 입력하세요 :(ST로 시작합니다.) ");
         String studentId = sc.next();
         boolean flag = false;
         Student student = null;
@@ -419,7 +419,7 @@ public class CampManagementApplication {
     // 수강생 삭제(5)
     private static void deleteStudent() {
         System.out.println("\n수강생을 삭제합니다...");
-        System.out.println("삭제할 수강생 번호 입력: ");
+        System.out.println("삭제할 수강생 번호 입력: (ST로 시작합니다.)");
         String studentId = sc.next();
 
         // 해당 수강생을 studentStored에서 제거 / 점수 기록 부분도 삭제가 되야되는데...?
@@ -437,14 +437,32 @@ public class CampManagementApplication {
     private static void inquireCondition() {
         System.out.print("조회할 상태를 입력하세요…(Green, Red, Yellow)");
         String condition = sc.next();
-
-
-        for (Student student : studentStore) {
-            if (student.getCondition().name().equals(condition)) {
-                System.out.println(condition + " 상태 수강생 목록을 조회합니다.");
-                System.out.println("수강생 번호: " + student.getStudentId() + ", 이름: " + student.getStudentName() + ", 상태: " + student.getCondition());
+        while (true) {
+            if (condition.equalsIgnoreCase("Green") || condition.equalsIgnoreCase("Red") || condition.equalsIgnoreCase("Yellow")) {
+                break;
+            } else {
+                System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+                break;
             }
         }
+
+        boolean found = false;
+        for (Student student : studentStore) {
+            if (student.getCondition().name().equalsIgnoreCase(condition)) {
+                if (!found) {
+                    System.out.println(condition + " 상태 수강생 목록을 조회합니다...");
+                }
+                System.out.println("수강생 번호: " + student.getStudentId());
+                System.out.println("이름: " + student.getStudentName());
+                System.out.println("상태: " + student.getCondition());
+                found = true;
+            }
+        }
+        //false = 수강생 목록이 비어있음
+        if (!found) {
+            System.out.println("수강생을 찾을 수 없습니다.");
+        }
+
     }
 
 
