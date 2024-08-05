@@ -40,6 +40,9 @@ public class CampManagementApplication {
     private static int scoreIndex;
     private static final String INDEX_TYPE_SCORE = "SC";
 
+    //몇개의 과목을 담아놓을지.
+    private List<String> strSubject;
+
     // 스캐너
     private static Scanner sc = new Scanner(System.in);
 
@@ -65,8 +68,8 @@ public class CampManagementApplication {
                 new Subject(sequence(INDEX_TYPE_SUBJECT), "Redis", SUBJECT_TYPE_CHOICE), new Subject(sequence(INDEX_TYPE_SUBJECT), "MongoDB", SUBJECT_TYPE_CHOICE));
 
         scoreStore = new ArrayList<>();
-        Student student = new Student(sequence(INDEX_TYPE_STUDENT), "bo"); // 수강생 인스턴스 생성 예시 코드
-        studentStore.add(student);
+        //Student student = new Student(sequence(INDEX_TYPE_STUDENT), "bo"); // 수강생 인스턴스 생성 예시 코드
+        //studentStore.add(student);
         Score scoreID = new Score(sequence(INDEX_TYPE_SCORE), "ST1", 1, 95, "SU1");
         scoreStore.add(scoreID);
     }
@@ -147,14 +150,14 @@ public class CampManagementApplication {
         }
     }
 
-    private static void conditionStudent(){
+    private static void conditionStudent() {
         System.out.println("수강생의 컨디션을 확인합니다...");
         System.out.print("수강생 번호 입력: ");
         String studentId = sc.next();
 
         boolean exist = false;
-        for(Student i : studentStore){
-            if(i.getStudentId().equals(studentId)){
+        for (Student i : studentStore) {
+            if (i.getStudentId().equals(studentId)) {
                 exist = true;
                 i.getCondition();
                 break;
@@ -172,8 +175,126 @@ public class CampManagementApplication {
         System.out.println("\n수강생을 등록합니다...");
         System.out.print("수강생 이름 입력: ");
         String studentName = sc.next();
-        // 기능 구현 (필수 과목, 선택 과목)
-        Student student = new Student(sequence(INDEX_TYPE_STUDENT), studentName); // 수강생 인스턴스 생성 예시 코드
+        List<Subject> subjectList = new ArrayList<>();
+        System.out.println("최소 3개 이상의 필수과목과 2개 이상의 선택 과목을 선택하세요.");
+        //선택한 필수 과목 갯수
+        int count_mandatory = 0;
+        while (true) {
+            try {
+                //입력받은 과목이 3개 이상일 경우 선택과목으로 넘어갈 수 있는 입력을 받음
+                if (count_mandatory >= 3) {
+                    System.out.println("최소한의 조건을 만족하는 필수 과목을 선택했습니다 선택 과목 선택으로 넘어가려면 q를 입력해주세요.");
+                    System.out.println("=======필수 과목 코드=======");
+                    System.out.println("SU1  SU2   SU3   SU4  SU5");
+                } else {
+                    System.out.println("필수 과목 코드를 입력해주세요.");
+                    System.out.println("=======필수 과목 코드=======");
+                    System.out.println("SU1  SU2   SU3   SU4  SU5");
+                }
+                String mandatoryCode = sc.next();
+                //정해진 과목 코드 이외의 문자 입력시 예외 throw
+                if(mandatoryCode.equals("q")||mandatoryCode.equals("Q")) {
+                    System.out.println("q를 입력받았습니다, 선택 과목 입력으로 넘어갑니다.");
+                    break;
+                }
+                if (!mandatoryCode.equals("SU1") && !mandatoryCode.equals("SU2") && !mandatoryCode.equals("SU3") && !mandatoryCode.equals("SU4") && !mandatoryCode.equals("SU5")) {
+                    throw new IllegalArgumentException("잘못된 과목 코드 입력입니다.");
+                }
+                int subjectIdx = mandatoryCode.charAt(2) - '0';
+                //고유 번호는 idx+1값을 가짐
+                Subject subject = subjectStore.get(subjectIdx - 1);
+                subjectList.add(subject);
+                count_mandatory++;
+                //필수 과목은 최대 5종류
+                //입력 최소 조건인 3개를 입력할때까지와, 3개~5개를 입력한 경우를 나눠 메시지 출력.ㄴ
+                if (count_mandatory == 5) {
+                    System.out.println("필수 과목 5개를 모두 선택했습니다.");
+                    System.out.print("선택한 과목 코드 :");
+                    for (Subject s : subjectList) {
+                        System.out.print(" " + s.getSubjectId());
+                    }
+                    System.out.println();
+                    System.out.println("선택 과목 선택창으로 넘어갑니다.");
+                    break;
+                } else if (count_mandatory < 3) {
+                    System.out.println("필수 과목을 선택했습니다.");
+                    continue;
+                } else {
+                    //필수 과목이 3개 이상 5개 미만이면 저장된 과목 목록을 출력.
+                    System.out.println("현재까지 선택한 필수 과목은 " + count_mandatory + "개 입니다. 최대 5개 까지 선택할 수 있습니다.");
+                    System.out.print("선택한 과목 코드 :");
+                    for (Subject s : subjectList) {
+                        System.out.print(" " + s.getSubjectId());
+                    }
+                    System.out.println();
+                    continue;
+                }
+            } catch (IllegalArgumentException e) {
+                //필수 과목 이외에 잘못된 코드 입력시 재입력
+                System.out.println(e.getMessage());
+                continue;
+            }
+        }
+        int count_choice = 0;
+        while (true) {
+            try {
+                //입력받은 과목이 2개 이상일 경우 입력을 종료할 수 있는 입력을 받음
+                if (count_choice >= 3) {
+                    System.out.println("최소한의 조건을 만족하는 선택 과목을 선택했습니다 입력을 종료하려면 q를 입력해주세요.");
+                    System.out.println("선택 과목 코드를 입력해주세요.");
+                    System.out.println("=======선택 과목 코드=======");
+                    System.out.println("SU6    SU7    SU8    SU9");
+                } else {
+                    System.out.println("선택 과목 코드를 입력해주세요.");
+                    System.out.println("=======선택 과목 코드=======");
+                    System.out.println("SU6    SU7    SU8    SU9");
+                }
+
+                String choiceCode = sc.next();
+                //정해진 과목 코드 이외의 문자 입력시 예외 throw
+                if(choiceCode.equals("q")||choiceCode.equals("Q")) {
+                    System.out.println("q를 입력받았습니다, 선택 과목 입력을 종료합니다.");
+                    break;
+                }
+                if (!choiceCode.equals("SU6") && !choiceCode.equals("SU7") && !choiceCode.equals("SU8") && !choiceCode.equals("SU9")) {
+                    throw new IllegalArgumentException("잘못된 과목 코드 입력입니다.");
+                }
+
+                int subjectIdx = choiceCode.charAt(2) - '0';
+                Subject subject = subjectStore.get(subjectIdx - 1);
+                subjectList.add(subject);
+                count_choice++;
+                //선택 과목은 최대 4종류.
+                if (count_choice == 4) {
+                    System.out.println("선택 과목 4개를 모두 선택했습니다.");
+                    System.out.print("선택한 과목 코드 :");
+                    for (Subject s : subjectList) {
+                        System.out.print(" " + s.getSubjectId());
+                    }
+                    System.out.println();
+                    break;
+                } else if (count_choice < 2) {
+                    System.out.println("선택 과목을 선택했습니다.");
+                    continue;
+                } else {
+                    System.out.println("입력한 선택 과목은 " + count_choice + "개 입니다, 최대 4개까지 선택할 수 있습니다.");
+                    System.out.print("선택한 과목 코드 :");
+                    for (Subject s : subjectList) {
+                        System.out.print(" " + s.getSubjectId());
+                    }
+                    System.out.println();
+                    continue;
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                continue;
+            }
+
+        }
+
+        System.out.println("과목 입력이 종료되었습니다.");
+
+        Student student = new Student(sequence(INDEX_TYPE_STUDENT), studentName, subjectList); // 수강생 인스턴스 생성 예시 코드
 
         // 기능 구현
         studentStore.add(student);
@@ -206,7 +327,7 @@ public class CampManagementApplication {
 
         switch (change) {
             case "이름" -> {
-                while (true){
+                while (true) {
                     System.out.println("수정할 이름을 입력하세요: ");
                     String newName = sc.next();
                     if (newName.isEmpty()) {
@@ -243,8 +364,14 @@ public class CampManagementApplication {
         System.out.println("\n수강생 목록을 조회합니다...");
         // 기능 구현
         for (Student element : studentStore) {
-            System.out.println("수강생 이름 " + element.getStudentName());
-            System.out.println("수강생 번호 " + element.getStudentId());
+            System.out.println("수강생 이름 : " + element.getStudentName());
+            System.out.println("수강생 번호 : " + element.getStudentId());
+            System.out.print("수강 신청 과목 :");
+            List<Subject> subjectList = element.getSubjectList();
+            for (int i = 0; i < subjectList.size(); i++) {
+                System.out.print(" " + subjectList.get(i).getSubjectName());
+            }
+            System.out.println();
         }
         System.out.println("\n수강생 목록 조회 성공!");
     }
@@ -303,8 +430,13 @@ public class CampManagementApplication {
             //수강생이 있다면, 정보를 출력
             System.out.println("수강생 번호 : " + student.getStudentId());
             System.out.println("수강생 이름 : " + student.getStudentName());
-            //System.out.println("수강생 상태 : " + student.getCondition());
-            //System.out.println("선택한 과목명 : " +student.getSubjects());
+            System.out.println("수강생 상태 : " + student.getCondition());
+            System.out.print("수강 신청 과목 :");
+            List<Subject> subjectList = student.getSubjectList();
+            for (int i = 0; i < subjectList.size(); i++) {
+                System.out.print(" " + subjectList.get(i).getSubjectName());
+            }
+            System.out.println();
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -340,39 +472,89 @@ public class CampManagementApplication {
     }
 
     private static String getStudentId() {
-        System.out.print("\n관리할 수강생의 번호를 입력하시오..");
+        System.out.print("\n관리할 수강생의 번호를 입력하시오..(ST로 시작합니다.)");
         return sc.next();
     }
 
     // 수강생의 과목별 시험 회차 및 점수 등록
     private static void createScore() {
-        String studentId = getStudentId();// 관리할 수강생 고유 번호
+        String studentId;
+        String subjectID;
+        List<Subject> subjectList = new ArrayList<>();
 
-        System.out.print("과목 코드를 입력하세요 : ");
-        String subjectID = sc.next();
+        //studentstore의 subjectlist
+        //수강생의 고유 번호가 있는지 없는지를 체크하고,
+        //가져온 정보에서 조회.
+        //일치하는 학생이 향상된 for문 으로 나오면
+        //과목리스트에서도 검색.
+        //subjectList 안에 있는 과목만 선택 가능.
 
         int round;
-        while (true) {
-            System.out.print("회차를 입력하세요 (1~10) : ");
-            round = sc.nextInt();
-            if (round >= 1 && round <= 10) {
-                break;
-            } else {
-                System.out.println("잘못된 입력입니다. 1~10회차 중 입력해주세요.");
-            }
-        }
-
         int score;
         while (true) {
+            studentId = getStudentId();// 관리할 수강생 고유 번호
+            try{
+                for(Student s : studentStore){
+                    if (studentId.equals(s.getStudentId())) {
+                        System.out.println("수강생 코드 입력 완료!");
+                        subjectList = s.getSubjectList();
+                    }
+                    else {
+                        throw new Exception("수강생 코드가 존재하지 않습니다.");
+                    }
+                }
+            }catch (Exception exception){
+                System.out.println("에러메세지:" + exception.getMessage());
+                continue;
+            }
+            System.out.print("과목 코드를 입력하세요(SU로 시작 최대 9번까지.) : ");
+            subjectID = sc.next();
+            try {
+                boolean flag = false;
+                for (int i = 0; i < subjectList.size(); i++) {
+                    if (subjectList.get(i).getSubjectId().equals(subjectID)) {
+                        System.out.println("과목 코드 입력 완료!");
+                        flag = true;
+                        break;
+                        //선택 과목만 가능하게 하기.
+                        //IF 학생이 선택한 과목이 맞다면....
+                    }
+                }
+                if (!flag){
+                    throw new Exception("수강신청을 하지 않았습니다.");
+                }
+            } catch (Exception exception) {
+                System.out.println("에러메세지:" + exception.getMessage());
+                continue;
+            }
+            System.out.print("회차를 입력하세요 (1~10) : ");
+            round = sc.nextInt();
+            try{
+                if(round >=1 && round <=10){
+                    System.out.println("회차 입력 완료!");
+                }
+                else{
+                    throw new Exception("회차 정보와 다릅니다.");
+                    }
+            }
+            catch(Exception exception){
+                System.out.println("에러메세지:" + exception.getMessage());
+                continue;
+            }
             System.out.println("점수를 입력하세요 : ");
             score = sc.nextInt();
-            if (score >= 0 && score <= 100) {
-                break;
-            } else {
-                System.out.println("잘못된 입력입니다. 0~100점 사이로 입력해주세요.");
+            try{
+                if(score>=0 && score<= 100){
+                    System.out.println("점수 입력 완료!");
+                    break;
+                }
+                else{
+                    throw new Exception("점수는 0부터 100까지입니다.");
+                }
+            }catch (Exception exception){
+                System.out.println("에러메세지:" + exception.getMessage());
             }
         }
-
         Score scoreID = new Score(sequence(INDEX_TYPE_SCORE), studentId, round, score, subjectID);
         scoreStore.add(scoreID);
 
@@ -381,6 +563,8 @@ public class CampManagementApplication {
         System.out.println(scoreID.getGrade());
 
         System.out.println("\n점수 등록 성공!");
+
+
     }
 
     // 수강생의 과목별 회차 점수 수정
@@ -486,8 +670,6 @@ public class CampManagementApplication {
         //과목명이 아니라 과목 코드 입력
         System.out.print("조회할 과목코드를 입력해주세요 : ");
         String subjectId = sc.next();
-//        System.out.print("조회할 과목명을 입력해주세요 : ");
-//        String subjectName = sc.next();
         sc.nextLine();
 
         //해당 학생Id를 기본키로 데이터 조회 - 그 학생Id의 특정 과목에 대한 모든 데이터를 가져와야함.
