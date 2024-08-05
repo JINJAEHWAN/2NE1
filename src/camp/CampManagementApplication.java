@@ -272,11 +272,14 @@ public class CampManagementApplication {
 
         // 해당 수강생을 studentStored에서 제거 / 점수 기록 부분도 삭제가 되야되는데...?
         boolean removed = studentStore.removeIf(student -> student.getStudentId().equals(studentId));
-        if(removed) {
+        if (removed) {
             scoreStore.removeIf(score -> score.getStudentId().equals(studentId));
             System.out.println("수강생 및 점수 기록 삭제 성공!\n");
         } else {
             System.out.println("해당 번호의 수강생을 찾을 수 없습니다.\n");
+
+        }
+    }
     // 수강생 정보 조회
     private static void getStudentInfo() {
         System.out.print("정보를 조회할 수강생의 번호를 입력하세요 : ");
